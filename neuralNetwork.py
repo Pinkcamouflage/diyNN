@@ -26,6 +26,21 @@ class NN():
         for layer in self.layers[1:]:
             inputData = layer.forward(inputData)
         return inputData
+    
+    def train(self, inputData: np.ndarray, targetData: np.ndarray, epochs=1):
+        for epoch in range(epochs):
+            outputs=np.array([self.forward(x) for x in inputData]).flatten()
+
+            loss = np.mean((np.array(outputs) - np.array(targetData)) ** 2)
+            
+            gradients = []
+            for layer in reversed(self.layers[1:]):
+                gradients.append([outputs @ (2 * (outputs[i] - targetData[i]) / targetData.shape) for i in range(len(outputs))])
+                
+            print(gradients)
+                
+
+                    
 
     def print(self):
         for i, layer in enumerate(self.layers[1:], start=1):
